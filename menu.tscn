@@ -1,0 +1,264 @@
+[gd_scene load_steps=9 format=3 uid="uid://q8h7n4x361c4"]
+
+[ext_resource type="Script" path="res://main_menu_script.gd" id="1_vf6bg"]
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tiqul"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ajw3"]
+bg_color = Color(0.737853, 0.347951, 0.192231, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0icq"]
+bg_color = Color(0.683078, 0.316063, 0.168651, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+shadow_size = 10
+
+[sub_resource type="Animation" id="Animation_fju1i"]
+length = 0.001
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("MainButtonContainer:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_e7x7c"]
+resource_name = "EnterStartGameMenu"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StartGameMenu:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MainButtonContainer:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_53ksw"]
+resource_name = "ExitStartGameMenu"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StartGameMenu:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0, 0)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("MainButtonContainer:scale")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ivapl"]
+_data = {
+"EnterStartGameMenu": SubResource("Animation_e7x7c"),
+"ExitStartGameMenu": SubResource("Animation_53ksw"),
+"RESET": SubResource("Animation_fju1i")
+}
+
+[node name="MainMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_vf6bg")
+
+[node name="MainButtonContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -110.0
+offset_right = 175.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(175, 110)
+theme_override_constants/separation = 50
+
+[node name="StartGameButton" type="Button" parent="MainButtonContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/h_separation = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tiqul")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4ajw3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x0icq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x0icq")
+text = "Start New Game"
+
+[node name="ExitGameButton" type="Button" parent="MainButtonContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/h_separation = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tiqul")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4ajw3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x0icq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x0icq")
+text = "Exit Game"
+
+[node name="StartGameMenu" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(1e-05, 1e-05)
+pivot_offset = Vector2(576, 324)
+
+[node name="StartGameContainer" type="VBoxContainer" parent="StartGameMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -110.0
+offset_right = 175.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(175, 110)
+theme_override_constants/separation = 50
+
+[node name="WidthLabel" type="Label" parent="StartGameMenu/StartGameContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Labyrinth width:"
+
+[node name="WidthSpinBox" type="SpinBox" parent="StartGameMenu/StartGameContainer/WidthLabel"]
+layout_mode = 2
+offset_top = 23.0
+offset_right = 350.0
+offset_bottom = 54.0
+min_value = 5.0
+value = 5.0
+rounded = true
+alignment = 1
+update_on_text_changed = true
+
+[node name="LengthLabel" type="Label" parent="StartGameMenu/StartGameContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Labyrinth length:"
+
+[node name="LengthSpinBox" type="SpinBox" parent="StartGameMenu/StartGameContainer/LengthLabel"]
+layout_mode = 2
+offset_top = 23.0
+offset_right = 350.0
+offset_bottom = 54.0
+min_value = 5.0
+value = 5.0
+rounded = true
+alignment = 1
+update_on_text_changed = true
+
+[node name="StartButton" type="Button" parent="StartGameMenu/StartGameContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/h_separation = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tiqul")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4ajw3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x0icq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x0icq")
+text = "Start
+"
+
+[node name="BackButton" type="Button" parent="StartGameMenu"]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.13
+anchor_top = 0.116
+anchor_right = 0.13
+anchor_bottom = 0.116
+offset_left = -99.76
+offset_top = -25.168
+offset_right = 100.24
+offset_bottom = 24.832
+pivot_offset = Vector2(100, 25)
+size_flags_vertical = 3
+theme_override_colors/font_hover_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/h_separation = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tiqul")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4ajw3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x0icq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x0icq")
+text = "Back
+"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ivapl")
+}
+
+[connection signal="pressed" from="MainButtonContainer/StartGameButton" to="." method="_on_start_game_pressed"]
+[connection signal="pressed" from="MainButtonContainer/ExitGameButton" to="." method="_on_exit_game_pressed"]
+[connection signal="pressed" from="StartGameMenu/StartGameContainer/StartButton" to="." method="_on_start_pressed"]
+[connection signal="pressed" from="StartGameMenu/BackButton" to="." method="_on_back_button_pressed"]

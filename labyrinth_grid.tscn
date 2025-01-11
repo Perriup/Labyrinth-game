@@ -1,17 +1,17 @@
 [gd_scene load_steps=16 format=3 uid="uid://cmf7wcvl671ty"]
 
-[ext_resource type="Texture2D" uid="uid://3am4tmr8j16i" path="res://Textures/Square tile/square_tiles_03_diff_1k.png" id="1_pl3xo"]
-[ext_resource type="Texture2D" uid="uid://cq481g3wrf5yj" path="res://Textures/Square tile/square_tiles_03_nor_gl_1k.png" id="2_ughpn"]
-[ext_resource type="Texture2D" uid="uid://gb562nohgh28" path="res://Textures/Square tile/square_tiles_03_rough_1k.png" id="3_np7hu"]
-[ext_resource type="Texture2D" uid="uid://ck4ahj4ih3yu6" path="res://Textures/Wood/oak_veneer_01_diff_1k.png" id="4_btjfs"]
-[ext_resource type="Texture2D" uid="uid://bgh4qwqbe23hx" path="res://Textures/Wood/oak_veneer_01_nor_gl_1k.png" id="5_ue6ei"]
-[ext_resource type="Texture2D" uid="uid://cxrby0te1nmiq" path="res://Textures/Wood/oak_veneer_01_rough_1k.png" id="6_et4up"]
+[ext_resource type="Texture2D" uid="uid://3am4tmr8j16i" path="res://Textures/Square tile/square_tiles_03_diff_1k.png" id="1_75ln3"]
+[ext_resource type="Texture2D" uid="uid://cq481g3wrf5yj" path="res://Textures/Square tile/square_tiles_03_nor_gl_1k.png" id="2_wja3b"]
+[ext_resource type="Texture2D" uid="uid://gb562nohgh28" path="res://Textures/Square tile/square_tiles_03_rough_1k.png" id="3_wmk02"]
+[ext_resource type="Texture2D" uid="uid://ck4ahj4ih3yu6" path="res://Textures/Wood/oak_veneer_01_diff_1k.png" id="4_4ra1g"]
+[ext_resource type="Texture2D" uid="uid://bgh4qwqbe23hx" path="res://Textures/Wood/oak_veneer_01_nor_gl_1k.png" id="5_vaklw"]
+[ext_resource type="Texture2D" uid="uid://cxrby0te1nmiq" path="res://Textures/Wood/oak_veneer_01_rough_1k.png" id="6_lhtsm"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rsdgg"]
-albedo_texture = ExtResource("1_pl3xo")
-roughness_texture = ExtResource("3_np7hu")
+albedo_texture = ExtResource("1_75ln3")
+roughness_texture = ExtResource("3_wmk02")
 normal_enabled = true
-normal_texture = ExtResource("2_ughpn")
+normal_texture = ExtResource("2_wja3b")
 uv1_scale = Vector3(4, 4, 4)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_671il"]
@@ -22,10 +22,10 @@ size = Vector2(1, 1)
 points = PackedVector3Array(0.507937, 0.00793651, 0.507937, -0.507937, -0.00793651, -0.507937, -0.507937, 0.00793651, -0.507937, 0.507937, -0.00793651, -0.507937, -0.507937, -0.00793651, 0.507937, -0.507937, 0.00793651, 0.507937, 0.507937, 0.00793651, -0.507937, 0.507937, -0.00793651, 0.507937)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ucy3h"]
-albedo_texture = ExtResource("4_btjfs")
-roughness_texture = ExtResource("6_et4up")
+albedo_texture = ExtResource("4_4ra1g")
+roughness_texture = ExtResource("6_lhtsm")
 normal_enabled = true
-normal_texture = ExtResource("5_ue6ei")
+normal_texture = ExtResource("5_vaklw")
 uv1_scale = Vector3(4, 4, 4)
 
 [sub_resource type="BoxMesh" id="BoxMesh_5e46k"]

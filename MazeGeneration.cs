@@ -8,34 +8,37 @@ public partial class MazeGeneration : Node
 {
 	public override void _Ready()
 	{
-		// Generate and use the maze when the scene is ready.
-		string mazeJson = GetMaze();
-		GD.Print(mazeJson);
-		 // You can call a function here to parse `mazeJson` and use it to build the maze in Godot.
+		var shared_data = (Godot.Collections.Dictionary)GetNode("/root/Global").Get("shared_data");
+		
+		int width = (int)shared_data["width"];
+		int length = (int)shared_data["length"];
+		
+		string mazeJson = GetMaze(width, length);
+		//GD.Print(mazeJson);
 		BuildMaze(mazeJson);
 	}
 	
-	public string GetMaze()
+	public string GetMaze(int inputWidth, int inputLength)
 	{
 		Random rnd = new Random();
 		int randomSeed = rnd.Next(100000);
-		int width = 20;
-		int height = 20;
+		int width = inputWidth;
+		int length = inputLength;
 		
 		MazeCreation mazeCreation = new MazeCreation();
-		Vertex[,] maze = mazeCreation.CreateMaze(randomSeed, width, height);
+		Vertex[,] maze = mazeCreation.CreateMaze(randomSeed, width, length);
 		
-		PrintMaze(maze, width, height);
+		PrintMaze(maze, width, length);
 		
-		return ExportMazeToJson(maze, width, height);
+		return ExportMazeToJson(maze, width, length);
 	}
 	
-	private string ExportMazeToJson(Vertex[,] maze, int width, int height)
+	private string ExportMazeToJson(Vertex[,] maze, int width, int length)
 	{
 		var mazeData = new List<Dictionary<string, object>>();
 		for (int i = 0; i < width; i++)
 		{
-			for (int j = 0; j < height; j++)
+			for (int j = 0; j < length; j++)
 			{
 				var vertex = maze[i, j];
 				mazeData.Add(new Dictionary<string, object>
@@ -68,7 +71,7 @@ public partial class MazeGeneration : Node
 			bool west = cell["West"].GetBoolean();
 			
 			// Create a new instance of the labirinth_grid scene.
-			PackedScene gridScene = (PackedScene)GD.Load("res://labirinth_grid.tscn");
+			PackedScene gridScene = (PackedScene)GD.Load("res://labyrinth_grid.tscn");
 			Node3D gridInstance = (Node3D)gridScene.Instantiate();
 			
 			// Place the grid at the correct position
