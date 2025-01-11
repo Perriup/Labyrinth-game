@@ -1,0 +1,170 @@
+[gd_scene load_steps=11 format=3 uid="uid://0ymvxxfiqddk"]
+
+[ext_resource type="Script" path="res://win_screen.gd" id="1_nm7wb"]
+
+[sub_resource type="LabelSettings" id="LabelSettings_ktw3n"]
+font_size = 30
+font_color = Color(1, 1, 0, 1)
+
+[sub_resource type="GDScript" id="GDScript_32dce"]
+script/source = "extends Label
+
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	Global.shared_data[\"width\"]
+
+
+# Called every frame. 'delta' is the elapsed time since the previous frame.
+func _process(delta: float) -> void:
+	pass
+"
+
+[sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_tiqul"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4ajw3"]
+bg_color = Color(0.737853, 0.347951, 0.192231, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+shadow_size = 10
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_x0icq"]
+bg_color = Color(0.683078, 0.316063, 0.168651, 1)
+corner_radius_top_left = 40
+corner_radius_top_right = 40
+corner_radius_bottom_right = 40
+corner_radius_bottom_left = 40
+shadow_size = 10
+
+[sub_resource type="Animation" id="Animation_e7x7c"]
+resource_name = "EnterStartGameMenu"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StartGameMenu:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(0, 0), Vector2(1.1, 1.1), Vector2(1, 1)]
+}
+
+[sub_resource type="Animation" id="Animation_53ksw"]
+resource_name = "ExitStartGameMenu"
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("StartGameMenu:scale")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.4),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector2(1, 1), Vector2(1.1, 1.1), Vector2(0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_fju1i"]
+length = 0.001
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_ivapl"]
+_data = {
+"EnterStartGameMenu": SubResource("Animation_e7x7c"),
+"ExitStartGameMenu": SubResource("Animation_53ksw"),
+"RESET": SubResource("Animation_fju1i")
+}
+
+[node name="WinScreen" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_nm7wb")
+
+[node name="StartGameMenu" type="Control" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -576.0
+offset_top = -324.0
+offset_right = 576.0
+offset_bottom = 324.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(576, 324)
+
+[node name="StartGameContainer" type="VBoxContainer" parent="StartGameMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -175.0
+offset_top = -110.0
+offset_right = 175.0
+offset_bottom = 110.0
+grow_horizontal = 2
+grow_vertical = 2
+pivot_offset = Vector2(175, 110)
+theme_override_constants/separation = 50
+
+[node name="WinLabel" type="Label" parent="StartGameMenu/StartGameContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "You Win!!!"
+label_settings = SubResource("LabelSettings_ktw3n")
+horizontal_alignment = 1
+
+[node name="WidthLabel" type="Label" parent="StartGameMenu/StartGameContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Labyrinth width: "
+label_settings = SubResource("LabelSettings_ktw3n")
+horizontal_alignment = 1
+script = SubResource("GDScript_32dce")
+
+[node name="LengthLabel" type="Label" parent="StartGameMenu/StartGameContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Labyrinth length: "
+label_settings = SubResource("LabelSettings_ktw3n")
+horizontal_alignment = 1
+
+[node name="TimeLabel" type="Label" parent="StartGameMenu/StartGameContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+text = "Time taken to beat: "
+label_settings = SubResource("LabelSettings_ktw3n")
+horizontal_alignment = 1
+
+[node name="RestartButton" type="Button" parent="StartGameMenu/StartGameContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/h_separation = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tiqul")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4ajw3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x0icq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x0icq")
+text = "Restart
+"
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_ivapl")
+}
+
+[connection signal="pressed" from="StartGameMenu/StartGameContainer/RestartButton" to="." method="_on_restart_button_pressed"]

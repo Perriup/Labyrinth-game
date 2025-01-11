@@ -15,7 +15,7 @@ public partial class MazeGeneration : Node
 		
 		string mazeJson = GetMaze(width, length);
 		//GD.Print(mazeJson);
-		BuildMaze(mazeJson);
+		BuildMaze(mazeJson, width, length);
 	}
 	
 	public string GetMaze(int inputWidth, int inputLength)
@@ -55,37 +55,57 @@ public partial class MazeGeneration : Node
 		return JsonSerializer.Serialize(mazeData);
 	}
 	
-	private void BuildMaze(string mazeJson)
+	private void BuildMaze(string mazeJson, int width, int length)
 	{
 		// Parse the maze JSON and build the maze in the Godot scene.
-		var mazeData = JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(mazeJson);
+		var maze_data = JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(mazeJson);
 		
 		// Iterate through maze cells
-		foreach (var cell in mazeData)
+		foreach (var cell in maze_data)
 		{
 			int x = cell["X"].GetInt32();
-			int y = cell["Y"].GetInt32();
+			// z is taken from y, because the maze is generated on a 2d xy plane, rather than 3d
+			int z = cell["Y"].GetInt32();
 			bool north = cell["North"].GetBoolean();
 			bool south = cell["South"].GetBoolean();
 			bool east = cell["East"].GetBoolean();
 			bool west = cell["West"].GetBoolean();
 			
 			// Create a new instance of the labirinth_grid scene.
-			PackedScene gridScene = (PackedScene)GD.Load("res://labyrinth_grid.tscn");
-			Node3D gridInstance = (Node3D)gridScene.Instantiate();
+			PackedScene grid_scene = (PackedScene)GD.Load("res://labyrinth_grid.tscn");
+			Node3D grid_instance = (Node3D)grid_scene.Instantiate();
 			
 			// Place the grid at the correct position
-			gridInstance.Position = new Vector3(x, 0, y);
+			grid_instance.Position = new Vector3(x, 0, z);
 			
 			// Remove walls as needed
-			if (north) gridInstance.GetNode("NorthWall").QueueFree();
-			if (south) gridInstance.GetNode("SouthWall").QueueFree();
-			if (east) gridInstance.GetNode("EastWall").QueueFree();
-			if (west) gridInstance.GetNode("WestWall").QueueFree();
+			if (north) grid_instance.GetNode("NorthWall").QueueFree();
+			if (south) grid_instance.GetNode("SouthWall").QueueFree();
+			if (east) grid_instance.GetNode("EastWall").QueueFree();
+			if (west) grid_instance.GetNode("WestWall").QueueFree();
 			
 			// Add to the scene tree
-			AddChild(gridInstance);
+			AddChild(grid_instance);
 		}
+		
+		AddStart();
+		AddEnd(width - 1, length - 1);
+	}
+	
+	private void AddStart()
+	{
+		PackedScene start_icon_scene = (PackedScene)GD.Load("res://start_icon.tscn");
+		Node3D start_instance = (Node3D)start_icon_scene.Instantiate();
+		start_instance.Position = new Vector3(0, 0, 0);
+		AddChild(start_instance);
+	}
+	
+	private void AddEnd(int x, int z)
+	{
+		PackedScene start_icon_scene = (PackedScene)GD.Load("res://end_icon.tscn");
+		Node3D start_instance = (Node3D)start_icon_scene.Instantiate();
+		start_instance.Position = new Vector3(x, 0, z);
+		AddChild(start_instance);
 	}
 	
 	internal class MazeCreation

@@ -46,13 +46,12 @@ points = PackedVector3Array(-0.0129303, -0.507937, -0.507937, 0.0188033, 0.50793
 
 [node name="BaseNode" type="Node3D"]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000852346, 0.00315011, -0.00344408)
+[node name="Floor" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_671il")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+[node name="StaticBody3D" type="StaticBody3D" parent="Floor"]
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Floor/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_ibim5")
 
 [node name="WestWall" type="MeshInstance3D" parent="."]
@@ -62,6 +61,15 @@ mesh = SubResource("BoxMesh_5e46k")
 [node name="StaticBody3D" type="StaticBody3D" parent="WestWall"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="WestWall/StaticBody3D"]
+shape = SubResource("ConvexPolygonShape3D_188bq")
+
+[node name="Roof" type="MeshInstance3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 10, 0)
+mesh = SubResource("BoxMesh_5e46k")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="Roof"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Roof/StaticBody3D"]
 shape = SubResource("ConvexPolygonShape3D_188bq")
 
 [node name="SouthWall" type="MeshInstance3D" parent="."]
