@@ -72,7 +72,7 @@ public partial class MazeGeneration : Node
 			bool west = cell["West"].GetBoolean();
 			
 			// Create a new instance of the labirinth_grid scene.
-			PackedScene grid_scene = (PackedScene)GD.Load("res://labyrinth_grid.tscn");
+			PackedScene grid_scene = (PackedScene)GD.Load("res://labyrinth_grid_past.tscn");
 			Node3D grid_instance = (Node3D)grid_scene.Instantiate();
 			
 			// Place the grid at the correct position

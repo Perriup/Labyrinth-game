@@ -46,7 +46,7 @@ albedo_color = Color(0, 1, 0, 1)
 albedo_texture_msdf = true
 emission_enabled = true
 emission = Color(0, 1, 0, 1)
-emission_energy_multiplier = 2.0
+emission_energy_multiplier = 0.5
 
 [sub_resource type="TextMesh" id="TextMesh_dim1j"]
 material = SubResource("StandardMaterial3D_qhsom")
