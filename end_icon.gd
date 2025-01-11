@@ -28,4 +28,7 @@ func _on_end_area_3d_body_entered(body: Node3D) -> void:
 		
 		Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
 		
-		get_tree().change_scene_to_file("res://win_screen.tscn")
+		call_deferred("change_scene_to_win")
+
+func change_scene_to_win():
+	get_tree().change_scene_to_file("res://win_screen.tscn")
