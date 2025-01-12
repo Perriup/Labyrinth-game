@@ -6,7 +6,7 @@
 [sub_resource type="BoxShape3D" id="BoxShape3D_wy0s7"]
 size = Vector3(1, 0.229721, 1)
 
-[node name="Node3D" type="Node3D"]
+[node name="Shovel" type="Node3D"]
 script = ExtResource("1_7klwe")
 
 [node name="Area3D" type="Area3D" parent="."]

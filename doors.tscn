@@ -14,10 +14,10 @@ size = Vector3(1, 1, 0.229736)
 [sub_resource type="BoxShape3D" id="BoxShape3D_2klkn"]
 size = Vector3(0.239944, 0.248535, 0.143555)
 
-[node name="Node3D" type="Node3D"]
+[node name="Doors" type="Node3D"]
 
 [node name="DoorFrame" type="StaticBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.38)
 
 [node name="CollisionShapeRight" type="CollisionShape3D" parent="DoorFrame"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.436523, 0, -9.15527e-05)
@@ -34,17 +34,46 @@ shape = SubResource("BoxShape3D_dpavw")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.421376, 0, -0.000183105)
 shape = SubResource("BoxShape3D_dpavw")
 
-[node name="Doors" type="StaticBody3D" parent="."]
+[node name="Doors" type="StaticBody3D" parent="DoorFrame"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
 
-[node name="Doors" parent="Doors" instance=ExtResource("2_h0pjc")]
+[node name="Doors" parent="DoorFrame/Doors" instance=ExtResource("2_h0pjc")]
 transform = Transform3D(0.03, 0, 0, 0, 0.045, 0, 0, 0, 0.03, 0, 0, 0)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="Doors"]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorFrame/Doors"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.00305176)
+shape = SubResource("BoxShape3D_04w0a")
+
+[node name="DoorFrame2" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.38)
+
+[node name="CollisionShapeRight" type="CollisionShape3D" parent="DoorFrame2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.436523, 0, -9.15527e-05)
+shape = SubResource("BoxShape3D_dpavw")
+
+[node name="Sketchfab_Scene" parent="DoorFrame2" instance=ExtResource("1_46423")]
+transform = Transform3D(0.03, 0, 0, 0, 0.045, 0, 0, 0, 0.03, 0, -0.501583, 0)
+
+[node name="CollisionShapeTop" type="CollisionShape3D" parent="DoorFrame2"]
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0.00433275, 0.435261, -0.00319791)
+shape = SubResource("BoxShape3D_dpavw")
+
+[node name="CollisionShapeLeft" type="CollisionShape3D" parent="DoorFrame2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.421376, 0, -0.000183105)
+shape = SubResource("BoxShape3D_dpavw")
+
+[node name="Doors" type="StaticBody3D" parent="DoorFrame2"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+
+[node name="Doors" parent="DoorFrame2/Doors" instance=ExtResource("2_h0pjc")]
+transform = Transform3D(0.03, 0, 0, 0, 0.045, 0, 0, 0, 0.03, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="DoorFrame2/Doors"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, -0.00305176)
 shape = SubResource("BoxShape3D_04w0a")
 
 [node name="Lever" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.524624, 0.77103)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.5)
 script = ExtResource("3_ufyk8")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Lever"]

@@ -8,35 +8,31 @@ public partial class MazeGeneration : Node
 {
 	public override void _Ready()
 	{
+		var level_name_list = new List<string> {"res://labyrinth_grid_past.tscn", "res://labyrinth_grid_present.tscn", "res://labyrinth_grid_future.tscn"};
 		var shared_data = (Godot.Collections.Dictionary)GetNode("/root/Global").Get("shared_data");
 		
 		int width = (int)shared_data["width"];
 		int length = (int)shared_data["length"];
 		
-		string mazeJson = GetMaze(width, length);
+		Vertex[,] maze = new Vertex[width, length];
+		string mazeJson = GetMaze(width, length, out maze);
 		//GD.Print(mazeJson);
-		BuildMaze(mazeJson, width, length);
+		BuildMaze(mazeJson, width, length, level_name_list);
+		List<string> route = FindRoute(maze, width - 1, length - 1);
+		PlaceObstacles(route, level_name_list, maze, width - 1, length - 1);
 	}
 	
-	public string GetMaze(int inputWidth, int inputLength)
+	public string GetMaze(int input_width, int input_length, out Vertex[,] maze)
 	{
 		Random rnd = new Random();
 		int randomSeed = rnd.Next(100000);
-		int width = inputWidth;
-		int length = inputLength;
 		
 		MazeCreation mazeCreation = new MazeCreation();
-		Vertex[,] maze = mazeCreation.CreateMaze(randomSeed, width, length);
+		maze = mazeCreation.CreateMaze(randomSeed, input_width, input_length);
 		
-		PrintMaze(maze, width, length);
+		PrintMaze(maze, input_width, input_length);
 		
-		List<string> route = FindRoute(maze, width - 1, length - 1);
-		foreach(var line in route)
-		{
-			GD.Print(line);
-		}
-		
-		return ExportMazeToJson(maze, width, length);
+		return ExportMazeToJson(maze, input_width, input_length);
 	}
 	
 	private string ExportMazeToJson(Vertex[,] maze, int width, int length)
@@ -61,10 +57,8 @@ public partial class MazeGeneration : Node
 		return JsonSerializer.Serialize(mazeData);
 	}
 	
-	private void BuildMaze(string mazeJson, int width, int length)
+	private void BuildMaze(string mazeJson, int width, int length, List<string> level_name_list)
 	{
-		var level_name_list = new List<string> {"res://labyrinth_grid_past.tscn", "res://labyrinth_grid_present.tscn", "res://labyrinth_grid_future.tscn"};
-		
 		// Parse the maze JSON and build the maze in the Godot scene.
 		var maze_data = JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(mazeJson);
 		
@@ -102,29 +96,29 @@ public partial class MazeGeneration : Node
 		AddStart(level_name_list);
 		AddEnd(width - 1, length - 1, level_name_list);
 		
-		PackedScene dump = (PackedScene)GD.Load("res://rubble.tscn");
-		Node3D d = (Node3D)dump.Instantiate();
-		
-		d.Position = new Vector3(1, 0, 0);
-		AddChild(d);
-		
-		PackedScene shovel = (PackedScene)GD.Load("res://shovel.tscn");
-		Node3D s = (Node3D)shovel.Instantiate();
-		
-		s.Position = new Vector3(1, 1, 0);
-		AddChild(s);
-		
-		PackedScene wall = (PackedScene)GD.Load("res://builtWall.tscn");
-		Node3D w = (Node3D)wall.Instantiate();
-		
-		w.Position = new Vector3(2, 0, 0);
-		AddChild(w);
-		
-		PackedScene door = (PackedScene)GD.Load("res://doors.tscn");
-		Node3D dor = (Node3D)door.Instantiate();
-		
-		dor.Position = new Vector3(3, 0, 0);
-		AddChild(dor);
+		//PackedScene dump = (PackedScene)GD.Load("res://rubble.tscn");
+		//Node3D d = (Node3D)dump.Instantiate();
+		//
+		//d.Position = new Vector3(1, 0, 0);
+		//AddChild(d);
+		//
+		//PackedScene shovel = (PackedScene)GD.Load("res://shovel.tscn");
+		//Node3D s = (Node3D)shovel.Instantiate();
+		//
+		//s.Position = new Vector3(1, 1, 0);
+		//AddChild(s);
+		//
+		//PackedScene wall = (PackedScene)GD.Load("res://builtWall.tscn");
+		//Node3D w = (Node3D)wall.Instantiate();
+		//
+		//w.Position = new Vector3(2, 0, 0);
+		//AddChild(w);
+		//
+		//PackedScene door = (PackedScene)GD.Load("res://doors.tscn");
+		//Node3D dor = (Node3D)door.Instantiate();
+		//
+		//dor.Position = new Vector3(3, 0, 0);
+		//AddChild(dor);
 	}
 	
 	private void AddStart(List<string> level_name_list)
@@ -216,7 +210,7 @@ public partial class MazeGeneration : Node
 		}
 	}
 	
-	internal class Vertex
+	public class Vertex
 	{
 		public Vertex(int x, int y, int width, int height)
 		{
@@ -501,5 +495,197 @@ public partial class MazeGeneration : Node
 		}
 		
 		return route;
+	}
+	
+	private void PlaceObstacles(List<string> route, List<string> level_name_list, Vertex[,] maze, int width, int length)
+	{
+		int route_length = route.Count;
+		int obstacle_count = Math.Max(1, route_length / 10); // At least 1 obstacle
+		int placed_obstacles = 0;
+		Random rnd = new Random();
+		List<int> available_indices = Enumerable.Range(3, route_length - 6).ToList();
+		available_indices = available_indices.OrderBy(_ => rnd.Next()).ToList(); // All possible spots randomized
+		int attempted_indices = 0;
+		
+		for (int obstacle = 0; obstacle < available_indices.Count; obstacle++)
+		{
+			string[] position = route[available_indices[obstacle]].Trim('[', ']').Split(", ");
+			int x = int.Parse(position[0]);
+			int z = int.Parse(position[1]);
+				
+			if ((maze[x, z].North == false && maze[x, z].South == false) || (maze[x, z].East == false && maze[x, z].West == false))
+			{
+				int correct_level = 0;//rnd.Next(3);
+				Node3D doors = new Node3D(); // Used for spawning door solution
+				
+				for (int y = 0; y < level_name_list.Count; y++)
+				{
+					string obstacle_name = "";
+					if (correct_level != y) // 1/3 chance to skip this level
+					{
+						switch(y)
+						{
+							case 0:
+								obstacle_name = "res://labyrinth_grid_past.tscn";
+								break;
+							case 1:
+								obstacle_name = "res://labyrinth_grid_present.tscn";
+								break;
+							case 2:
+								obstacle_name = "res://labyrinth_grid_future.tscn";
+								break;
+							default:
+								break;
+						}
+					}
+					else
+					{
+						switch(y)
+						{
+							case 0:
+								obstacle_name = "res://rubble.tscn";
+								break;
+							case 1:
+								obstacle_name = "res://builtWall.tscn";
+								break;
+							case 2:
+								obstacle_name = "res://doors.tscn";
+								break;
+							default:
+								break;
+						}
+					}
+					// Necessary due to how the buildWall obstacle is made
+					if (y == 0 && correct_level == 1)
+						continue;
+					
+					// Place the obstacle
+					PackedScene obstacle_scene = (PackedScene)GD.Load(obstacle_name);
+					Node3D obstacle_instance = (Node3D)obstacle_scene.Instantiate();
+					if (y == 1 && correct_level == y)
+						obstacle_instance.Position = new Vector3(x, 0, z);
+					else
+						obstacle_instance.Position = new Vector3(x, y, z);
+						
+					// Rotate obstacle
+					string[] prev_position = route[available_indices[obstacle] - 1].Trim('[', ']').Split(", ");
+					int prev_x = int.Parse(prev_position[0]);
+					int prev_z = int.Parse(prev_position[1]);
+					
+					if (prev_x == x)
+					{
+						if (prev_z < z)
+						{
+							obstacle_instance.Rotation = new Vector3(
+								obstacle_instance.Rotation.X, // X rotation
+								180 * (Mathf.Pi / 180.0f),            // rotated on Y axis
+								obstacle_instance.Rotation.Z  // Z rotation
+							);
+						}
+					}
+					else
+					{
+						if (prev_x > x)
+						{
+							obstacle_instance.Rotation = new Vector3(
+								obstacle_instance.Rotation.X, // X rotation
+								90 * (Mathf.Pi / 180.0f),            // rotated on Y axis
+								obstacle_instance.Rotation.Z  // Z rotation
+							);
+						}
+						else
+						{
+							obstacle_instance.Rotation = new Vector3(
+								obstacle_instance.Rotation.X, // X rotation
+								270 * (Mathf.Pi / 180.0f),            // rotated on Y axis
+								obstacle_instance.Rotation.Z  // Z rotation
+							);
+						}
+					}
+					AddChild(obstacle_instance);
+					if (correct_level == 2 && y == 2)
+						doors = obstacle_instance;
+				}
+				
+				if (correct_level == 0 || correct_level == 2)
+				{
+					Vertex solution = GetRandomReachableVertex (maze, width, length, x, z);
+					string solution_path = "";
+					if (correct_level == 0)
+					{
+						PackedScene solution_scene = (PackedScene)GD.Load("res://shovel.tscn");
+						Node3D solution_instance = (Node3D)solution_scene.Instantiate();
+						solution_instance.Position = new Vector3(solution.X, rnd.Next(1, 3), solution.Y);
+						AddChild(solution_instance);
+					}
+					else
+					{
+						Node3D leverNode = doorsInstance.GetNode<Node3D>("Lever");
+						leverNode.Position = (solution.X, 2, solution.Y); 
+					}
+				}
+				placed_obstacles++;
+			}
+			stop_placing:
+			if (placed_obstacles >= obstacle_count || attempted_indices >= available_indices.Count)
+				break;
+			//// Determine blocked route and place a key
+			//PlaceKey(route, chosen_route_indices.First(), level_name_list, obstacle_instance);
+		}
+	}
+	
+	private Vertex GetRandomReachableVertex(Vertex[,] maze, int width, int length, int obstacleX, int obstacleZ)
+	{
+		HashSet<Vertex> visited = new HashSet<Vertex>();
+		List<Vertex> reachableVertices = new List<Vertex>();
+		Queue<Vertex> queue = new Queue<Vertex>();
+		
+		// Start BFS from the fixed start position (0, 0)
+		Vertex start = maze[0, 0];
+		queue.Enqueue(start);
+		visited.Add(start);
+		
+		while (queue.Count > 0)
+		{
+			Vertex current = queue.Dequeue();
+			
+			// Skip the obstacle using its coordinates
+			if (current.X == obstacleX && current.Y == obstacleZ)
+				continue;
+				
+			// Add the current vertex to the reachable list
+			reachableVertices.Add(current);
+			
+			// Explore neighbors if they are within bounds, not visited, and connected
+			if (current.North && current.Y + 1 < length && !visited.Contains(maze[current.X, current.Y + 1]))
+			{
+				visited.Add(maze[current.X, current.Y + 1]);
+				queue.Enqueue(maze[current.X, current.Y + 1]);
+			}
+			if (current.South && current.Y - 1 >= 0 && !visited.Contains(maze[current.X, current.Y - 1]))
+			{
+				visited.Add(maze[current.X, current.Y - 1]);
+				queue.Enqueue(maze[current.X, current.Y - 1]);
+			}
+			if (current.East && current.X + 1 < width && !visited.Contains(maze[current.X + 1, current.Y]))
+			{
+				visited.Add(maze[current.X + 1, current.Y]);
+				queue.Enqueue(maze[current.X + 1, current.Y]);
+			}
+			if (current.West && current.X - 1 >= 0 && !visited.Contains(maze[current.X - 1, current.Y]))
+			{
+				visited.Add(maze[current.X - 1, current.Y]);
+				queue.Enqueue(maze[current.X - 1, current.Y]);
+			}
+		}
+		
+		// Choose a random vertex from reachableVertices
+		if (reachableVertices.Count > 0)
+		{
+			Random rnd = new Random();
+			return reachableVertices[rnd.Next(reachableVertices.Count)];
+		}
+		
+		return null; // No reachable vertex found
 	}
 }
