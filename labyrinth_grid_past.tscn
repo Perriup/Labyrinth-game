@@ -1,17 +1,15 @@
-[gd_scene load_steps=16 format=3 uid="uid://cmf7wcvl671ty"]
+[gd_scene load_steps=13 format=3 uid="uid://cmf7wcvl671ty"]
 
-[ext_resource type="Texture2D" uid="uid://3am4tmr8j16i" path="res://Textures/Square tile/square_tiles_03_diff_1k.png" id="1_75ln3"]
-[ext_resource type="Texture2D" uid="uid://cq481g3wrf5yj" path="res://Textures/Square tile/square_tiles_03_nor_gl_1k.png" id="2_wja3b"]
-[ext_resource type="Texture2D" uid="uid://gb562nohgh28" path="res://Textures/Square tile/square_tiles_03_rough_1k.png" id="3_wmk02"]
-[ext_resource type="Texture2D" uid="uid://ck4ahj4ih3yu6" path="res://Textures/Wood/oak_veneer_01_diff_1k.png" id="4_4ra1g"]
-[ext_resource type="Texture2D" uid="uid://bgh4qwqbe23hx" path="res://Textures/Wood/oak_veneer_01_nor_gl_1k.png" id="5_vaklw"]
-[ext_resource type="Texture2D" uid="uid://cxrby0te1nmiq" path="res://Textures/Wood/oak_veneer_01_rough_1k.png" id="6_lhtsm"]
+[ext_resource type="Texture2D" uid="uid://c6qetsc6aryr8" path="res://Textures/Tiger Rock/tiger_rock_diff_1k.png" id="1_ppt2x"]
+[ext_resource type="Texture2D" uid="uid://cfvtwpakixb4g" path="res://Textures/Tiger Rock/tiger_rock_nor_gl_1k.png" id="2_clkod"]
+[ext_resource type="Texture2D" uid="uid://boanqki5l7t16" path="res://Textures/Tiger Rock/tiger_rock_rough_1k.png" id="3_sk2t2"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rsdgg"]
-albedo_texture = ExtResource("1_75ln3")
-roughness_texture = ExtResource("3_wmk02")
+albedo_color = Color(0.823529, 0.764706, 0.8, 1)
+albedo_texture = ExtResource("1_ppt2x")
+roughness_texture = ExtResource("3_sk2t2")
 normal_enabled = true
-normal_texture = ExtResource("2_wja3b")
+normal_texture = ExtResource("2_clkod")
 uv1_scale = Vector3(4, 4, 4)
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_671il"]
@@ -22,10 +20,11 @@ size = Vector2(1, 1)
 points = PackedVector3Array(0.507937, 0.00793651, 0.507937, -0.507937, -0.00793651, -0.507937, -0.507937, 0.00793651, -0.507937, 0.507937, -0.00793651, -0.507937, -0.507937, -0.00793651, 0.507937, -0.507937, 0.00793651, 0.507937, 0.507937, 0.00793651, -0.507937, 0.507937, -0.00793651, 0.507937)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ucy3h"]
-albedo_texture = ExtResource("4_4ra1g")
-roughness_texture = ExtResource("6_lhtsm")
+albedo_color = Color(0.82482, 0.764091, 0.800428, 1)
+albedo_texture = ExtResource("1_ppt2x")
+roughness_texture = ExtResource("3_sk2t2")
 normal_enabled = true
-normal_texture = ExtResource("5_vaklw")
+normal_texture = ExtResource("2_clkod")
 uv1_scale = Vector3(4, 4, 4)
 
 [sub_resource type="BoxMesh" id="BoxMesh_5e46k"]
@@ -64,7 +63,7 @@ mesh = SubResource("BoxMesh_5e46k")
 shape = SubResource("ConvexPolygonShape3D_188bq")
 
 [node name="Roof" type="MeshInstance3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 1, 0)
+transform = Transform3D(-4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, 0, 1, 0, 0.95, 0)
 mesh = SubResource("BoxMesh_5e46k")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="Roof"]

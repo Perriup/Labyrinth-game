@@ -30,6 +30,12 @@ public partial class MazeGeneration : Node
 		
 		PrintMaze(maze, width, length);
 		
+		List<string> route = FindRoute(maze, width - 1, length - 1);
+		foreach(var line in route)
+		{
+			GD.Print(line);
+		}
+		
 		return ExportMazeToJson(maze, width, length);
 	}
 	
@@ -57,6 +63,8 @@ public partial class MazeGeneration : Node
 	
 	private void BuildMaze(string mazeJson, int width, int length)
 	{
+		var level_name_list = new List<string> {"res://labyrinth_grid_past.tscn", "res://labyrinth_grid_present.tscn", "res://labyrinth_grid_future.tscn"};
+		
 		// Parse the maze JSON and build the maze in the Godot scene.
 		var maze_data = JsonSerializer.Deserialize<List<Dictionary<string, JsonElement>>>(mazeJson);
 		
@@ -71,41 +79,74 @@ public partial class MazeGeneration : Node
 			bool east = cell["East"].GetBoolean();
 			bool west = cell["West"].GetBoolean();
 			
-			// Create a new instance of the labirinth_grid scene.
-			PackedScene grid_scene = (PackedScene)GD.Load("res://labyrinth_grid_past.tscn");
-			Node3D grid_instance = (Node3D)grid_scene.Instantiate();
-			
-			// Place the grid at the correct position
-			grid_instance.Position = new Vector3(x, 0, z);
-			
-			// Remove walls as needed
-			if (north) grid_instance.GetNode("NorthWall").QueueFree();
-			if (south) grid_instance.GetNode("SouthWall").QueueFree();
-			if (east) grid_instance.GetNode("EastWall").QueueFree();
-			if (west) grid_instance.GetNode("WestWall").QueueFree();
-			
-			// Add to the scene tree
-			AddChild(grid_instance);
+			for (int y = 0; y < level_name_list.Count; y++)
+			{
+				// Create a new instance of the labirinth_grid scene.
+				PackedScene grid_scene = (PackedScene)GD.Load(level_name_list[y]);
+				Node3D grid_instance = (Node3D)grid_scene.Instantiate();
+				
+				// Place the grid at the correct position
+				grid_instance.Position = new Vector3(x, y, z);
+				
+				// Remove walls as needed
+				if (north) grid_instance.GetNode("NorthWall").QueueFree();
+				if (south) grid_instance.GetNode("SouthWall").QueueFree();
+				if (east) grid_instance.GetNode("EastWall").QueueFree();
+				if (west) grid_instance.GetNode("WestWall").QueueFree();
+				
+				// Add to the scene tree
+				AddChild(grid_instance);
+			}
 		}
 		
-		AddStart();
-		AddEnd(width - 1, length - 1);
+		AddStart(level_name_list);
+		AddEnd(width - 1, length - 1, level_name_list);
+		
+		PackedScene dump = (PackedScene)GD.Load("res://rubble.tscn");
+		Node3D d = (Node3D)dump.Instantiate();
+		
+		d.Position = new Vector3(1, 0, 0);
+		AddChild(d);
+		
+		PackedScene shovel = (PackedScene)GD.Load("res://shovel.tscn");
+		Node3D s = (Node3D)shovel.Instantiate();
+		
+		s.Position = new Vector3(1, 1, 0);
+		AddChild(s);
+		
+		PackedScene wall = (PackedScene)GD.Load("res://builtWall.tscn");
+		Node3D w = (Node3D)wall.Instantiate();
+		
+		w.Position = new Vector3(2, 0, 0);
+		AddChild(w);
+		
+		PackedScene door = (PackedScene)GD.Load("res://doors.tscn");
+		Node3D dor = (Node3D)door.Instantiate();
+		
+		dor.Position = new Vector3(3, 0, 0);
+		AddChild(dor);
 	}
 	
-	private void AddStart()
+	private void AddStart(List<string> level_name_list)
 	{
-		PackedScene start_icon_scene = (PackedScene)GD.Load("res://start_icon.tscn");
-		Node3D start_instance = (Node3D)start_icon_scene.Instantiate();
-		start_instance.Position = new Vector3(0, 0, 0);
-		AddChild(start_instance);
+		for (int y = 0; y < level_name_list.Count; y++)
+		{
+			PackedScene start_icon_scene = (PackedScene)GD.Load("res://start_icon.tscn");
+			Node3D start_instance = (Node3D)start_icon_scene.Instantiate();
+			start_instance.Position = new Vector3(0, y, 0);
+			AddChild(start_instance);
+		}
 	}
 	
-	private void AddEnd(int x, int z)
+	private void AddEnd(int x, int z, List<string> level_name_list)
 	{
-		PackedScene start_icon_scene = (PackedScene)GD.Load("res://end_icon.tscn");
-		Node3D start_instance = (Node3D)start_icon_scene.Instantiate();
-		start_instance.Position = new Vector3(x, 0, z);
-		AddChild(start_instance);
+		for (int y = 0; y < level_name_list.Count; y++)
+		{
+			PackedScene start_icon_scene = (PackedScene)GD.Load("res://end_icon.tscn");
+			Node3D start_instance = (Node3D)start_icon_scene.Instantiate();
+			start_instance.Position = new Vector3(x, y, z);
+			AddChild(start_instance);
+		}
 	}
 	
 	internal class MazeCreation
@@ -322,71 +363,143 @@ public partial class MazeGeneration : Node
 	}
 	
 	private void PrintMaze(Vertex[,] maze, int width, int height)
-{
-	string horizontalLine = ""; // Represents +-- or +  
-	string verticalLine = ""; // Represents | or   
-
-	for (int i = height - 1; i >= 0; i--) // Top to bottom
 	{
-		verticalLine += "|"; // Start a new vertical line
+		string horizontalLine = ""; // Represents +-- or +  
+		string verticalLine = ""; // Represents | or   
 
-		for (int j = 0; j < width; j++) // Left to right
+		for (int i = height - 1; i >= 0; i--) // Top to bottom
 		{
-			// Check if we are in the topmost row
-			if (i == height - 1)
+			verticalLine += "|"; // Start a new vertical line
+
+			for (int j = 0; j < width; j++) // Left to right
 			{
-				// Always print +-- for the topmost horizontal line
-				horizontalLine += "+--";
-			}
-			else
-			{
-				// Print +-- if there's no northern connection, otherwise +  
-				if (maze[j, i].North)
+				// Check if we are in the topmost row
+				if (i == height - 1)
 				{
-					horizontalLine += "+  ";
-				}
-				else
-				{
+					// Always print +-- for the topmost horizontal line
 					horizontalLine += "+--";
 				}
-			}
-
-			// End of column, add a vertical bar
-			if (j == width - 1)
-			{
-				horizontalLine += "+";
-				verticalLine += "  |"; // End of row
-			}
-			else
-			{
-				// Print | if there's no eastern connection, otherwise a space
-				if (maze[j, i].East)
+				else
 				{
-					verticalLine += "   ";
+					// Print +-- if there's no northern connection, otherwise +  
+					if (maze[j, i].North)
+					{
+						horizontalLine += "+  ";
+					}
+					else
+					{
+						horizontalLine += "+--";
+					}
+				}
+
+				// End of column, add a vertical bar
+				if (j == width - 1)
+				{
+					horizontalLine += "+";
+					verticalLine += "  |"; // End of row
 				}
 				else
 				{
-					verticalLine += "  |";
+					// Print | if there's no eastern connection, otherwise a space
+					if (maze[j, i].East)
+					{
+						verticalLine += "   ";
+					}
+					else
+					{
+						verticalLine += "  |";
+					}
 				}
 			}
+
+			// Print the horizontal line and the vertical line for the current row
+			GD.Print(horizontalLine);
+			horizontalLine = ""; // Reset for the next row
+
+			GD.Print(verticalLine);
+			verticalLine = ""; // Reset for the next row
 		}
 
-		// Print the horizontal line and the vertical line for the current row
-		GD.Print(horizontalLine);
-		horizontalLine = ""; // Reset for the next row
-
-		GD.Print(verticalLine);
-		verticalLine = ""; // Reset for the next row
+		// Print the bottom-most horizontal line
+		string bottomLine = "";
+		for (int i = 0; i < width; i++)
+		{
+			bottomLine += "+--";
+		}
+		bottomLine += "+";
+		GD.Print(bottomLine);
 	}
-
-	// Print the bottom-most horizontal line
-	string bottomLine = "";
-	for (int i = 0; i < width; i++)
+	
+	private List<string> FindRoute(Vertex[,] maze, int endX, int endY)
 	{
-		bottomLine += "+--";
-	}
-	bottomLine += "+";
-	GD.Print(bottomLine);
-}
+		Stack<Vertex> stack = new Stack<Vertex>();
+		HashSet<Vertex> visited = new HashSet<Vertex>();
+		Dictionary<Vertex, Vertex> cameFrom = new Dictionary<Vertex, Vertex>(); // Used in tracing the correct path
+		List<string> route = new List<string>();
 
+		Vertex start = maze[0, 0];
+		Vertex end = maze[endX, endY];
+
+		stack.Push(start);
+
+		while (stack.Count > 0)
+		{
+			Vertex current = stack.Pop();
+			
+			// If this vertex is already visited, skip it
+			if (visited.Contains(current))
+				continue;
+			
+			visited.Add(current);
+			
+			// If we reached the end, backtrack to find the route
+			if (current == end)
+			{
+				Vertex backtrack = current;
+				while (backtrack != null)
+				{
+					route.Insert(0, $"[{backtrack.X}, {backtrack.Y}]");
+					cameFrom.TryGetValue(backtrack, out backtrack);
+				}
+				break;
+			}
+			
+			// Add unvisited neighbors and track where they came from
+			if (current.North && current.Y + 1 < maze.GetLength(1) && !visited.Contains(maze[current.X, current.Y + 1]))
+			{
+				stack.Push(maze[current.X, current.Y + 1]);
+				if (!cameFrom.ContainsKey(maze[current.X, current.Y + 1]))
+					cameFrom[maze[current.X, current.Y + 1]] = current;
+			}
+			
+			if (current.South && current.Y - 1 >= 0 && !visited.Contains(maze[current.X, current.Y - 1]))
+			{
+				stack.Push(maze[current.X, current.Y - 1]);
+				if (!cameFrom.ContainsKey(maze[current.X, current.Y - 1]))
+					cameFrom[maze[current.X, current.Y - 1]] = current;
+			}
+			
+			if (current.East && current.X + 1 < maze.GetLength(0) && !visited.Contains(maze[current.X + 1, current.Y]))
+			{
+				stack.Push(maze[current.X + 1, current.Y]);
+				if (!cameFrom.ContainsKey(maze[current.X + 1, current.Y]))
+					cameFrom[maze[current.X + 1, current.Y]] = current;
+			}
+			
+			if (current.West && current.X - 1 >= 0 && !visited.Contains(maze[current.X - 1, current.Y]))
+			{
+				stack.Push(maze[current.X - 1, current.Y]);
+				if (!cameFrom.ContainsKey(maze[current.X - 1, current.Y]))
+					cameFrom[maze[current.X - 1, current.Y]] = current;
+			}
+		}
+		
+		// If the route list is empty, no path was found
+		if (route.Count == 0)
+		{
+			route.Add("No route found.");
+		}
+		
+		return route;
+	}
 }

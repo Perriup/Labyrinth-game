@@ -1,0 +1,17 @@
+[gd_scene load_steps=3 format=3 uid="uid://d2kf8v8jn1xsq"]
+
+[ext_resource type="PackedScene" uid="uid://bepj6xhoxpt2y" path="res://Objects/Rubble/Sketchfab_Scene.glb" id="1_1gu8m"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ttpfi"]
+size = Vector3(0.812363, 0.73877, 0.655457)
+
+[node name="Rubble" type="Node3D"]
+
+[node name="RubbleStaticBody3D" type="StaticBody3D" parent="."]
+
+[node name="Sketchfab_Scene" parent="RubbleStaticBody3D" instance=ExtResource("1_1gu8m")]
+transform = Transform3D(0.109982, 0, 0.167044, 0, 0.434384, 0, -0.167044, 0, 0.109982, 0, -0.024276, -0.0234315)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="RubbleStaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0161816, 0.393744, -0.0194397)
+shape = SubResource("BoxShape3D_ttpfi")

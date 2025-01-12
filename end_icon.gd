@@ -1,6 +1,5 @@
 extends Node3D
 
-
 var start_time = 0
 var end_time = 0
 
@@ -11,11 +10,9 @@ func _ready() -> void:
 	
 	start_time = Time.get_ticks_msec()
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	pass
-
 
 func _on_end_area_3d_body_entered(body: Node3D) -> void:
 	if body.name == "Player":

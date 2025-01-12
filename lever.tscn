@@ -1,0 +1,11 @@
+[gd_scene load_steps=2 format=3 uid="uid://dliicmjt8ku8j"]
+
+[ext_resource type="PackedScene" uid="uid://bcn8wi2ee8cui" path="res://Objects/Lever/hand_lever_switch_with_armaturerigged_free.glb" id="1_avjjr"]
+
+[node name="Sketchfab_Scene" instance=ExtResource("1_avjjr")]
+
+[node name="Plane_001_Material_001_0" parent="Sketchfab_model/5713918ec94e40c9b444b86ed65916c6_fbx/Object_2/RootNode/Bones/Object_5/Skeleton3D" index="0"]
+transform = Transform3D(1, 1.19209e-07, 8.9407e-08, -2.08616e-07, 1, 1.78814e-07, -1.77636e-14, -8.9407e-08, 1, 0.632739, 0.0762755, 0.0652767)
+
+[node name="Cylinder_001_Material_001_0" parent="Sketchfab_model/5713918ec94e40c9b444b86ed65916c6_fbx/Object_2/RootNode/Bones/Object_5/Skeleton3D" index="1"]
+transform = Transform3D(0.999522, -1.98468e-07, 4.70786e-07, 1.88927e-07, 0.999521, 5.96047e-08, -4.38448e-07, 2.84081e-14, 0.999521, -1.77636e-15, 1.2034e-07, 3.34192e-08)

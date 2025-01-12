@@ -7,9 +7,12 @@ const SENSITIVITY = 0.003
 @onready var head = $Head
 @onready var camera = $Head/Camera3D
 @onready var head_bob: AnimationPlayer = $HeadBob
+@onready var heavy_breath: AudioStreamPlayer = $HeavyBreath
+@onready var raycast: RayCast3D = $Head/Camera3D/RayCast3D
 
 func _ready():
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	heavy_breath.play()
 
 func _unhandled_input(event):
 	if event is InputEventMouseMotion:
@@ -38,4 +41,28 @@ func _physics_process(delta: float) -> void:
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		head_bob.pause()
 
+	#Handle floor change
+	if Input.is_action_just_pressed("go_up_a_floor") && global_transform.origin.y < 2:
+		global_transform.origin.y += 1
+	if Input.is_action_just_pressed("go_down_a_floor") && global_transform.origin.y > 0.5:
+		global_transform.origin.y -= 1
 	move_and_slide()
+	
+	if Input.is_action_just_pressed("interact"):  # Bind "check_interact" in Input Map
+		check_raycast_hit()
+	
+func check_raycast_hit():
+	raycast.force_raycast_update()
+	if raycast.is_colliding():
+		var collider = raycast.get_collider()
+		print(collider)
+		if (collider.name == "RubbleStaticBody3D" && Global.shovel_collected):
+			collider.queue_free()
+		else:
+			var i = raycast.get_collider_shape()
+			var hit_node = collider.shape_owner_get_owner(i)
+			if (hit_node.name == "PalletteShape"):
+				collider.queue_free()
+			elif(collider.has_method("activate_lever")):
+				collider.activate_lever()
+			

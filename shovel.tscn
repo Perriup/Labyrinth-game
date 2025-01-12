@@ -1,0 +1,21 @@
+[gd_scene load_steps=4 format=3 uid="uid://cgwgs4nu3ww7v"]
+
+[ext_resource type="PackedScene" uid="uid://f7eooue4xpxl" path="res://Objects/Shovel/shovel_low-poly.glb" id="1_1qk1t"]
+[ext_resource type="Script" path="res://shovel.gd" id="1_7klwe"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wy0s7"]
+size = Vector3(1, 0.229721, 1)
+
+[node name="Node3D" type="Node3D"]
+script = ExtResource("1_7klwe")
+
+[node name="Area3D" type="Area3D" parent="."]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.133934, 0)
+shape = SubResource("BoxShape3D_wy0s7")
+
+[node name="Sketchfab_Scene" parent="Area3D" instance=ExtResource("1_1qk1t")]
+transform = Transform3D(0.6, 0, 0, 0, 0.6, 0, 0, 0, 0.6, 0, 0, 0)
+
+[connection signal="body_entered" from="Area3D" to="." method="_on_area_3d_body_entered"]
