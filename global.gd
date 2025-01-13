@@ -1,4 +1,7 @@
 extends Node
 
 var shared_data = {}
-var shovel_collected = false
+var shovels_collected = 0
+var character_movement = []
+var enable_controls = true
+var level = 0

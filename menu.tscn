@@ -121,6 +121,20 @@ grow_vertical = 2
 pivot_offset = Vector2(175, 110)
 theme_override_constants/separation = 50
 
+[node name="TutorialButton" type="Button" parent="MainButtonContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_colors/font_hover_color = Color(0.0768358, 0.0768358, 0.0768358, 1)
+theme_override_colors/font_focus_color = Color(0, 0, 0, 1)
+theme_override_colors/font_color = Color(0, 0, 0, 1)
+theme_override_constants/h_separation = 0
+theme_override_font_sizes/font_size = 26
+theme_override_styles/focus = SubResource("StyleBoxEmpty_tiqul")
+theme_override_styles/hover = SubResource("StyleBoxFlat_4ajw3")
+theme_override_styles/pressed = SubResource("StyleBoxFlat_x0icq")
+theme_override_styles/normal = SubResource("StyleBoxFlat_x0icq")
+text = "Tutorial"
+
 [node name="StartGameButton" type="Button" parent="MainButtonContainer"]
 layout_mode = 2
 size_flags_vertical = 3
@@ -258,6 +272,7 @@ libraries = {
 "": SubResource("AnimationLibrary_ivapl")
 }
 
+[connection signal="pressed" from="MainButtonContainer/TutorialButton" to="." method="_on_tutorial_button_pressed"]
 [connection signal="pressed" from="MainButtonContainer/StartGameButton" to="." method="_on_start_game_pressed"]
 [connection signal="pressed" from="MainButtonContainer/ExitGameButton" to="." method="_on_exit_game_pressed"]
 [connection signal="pressed" from="StartGameMenu/StartGameContainer/StartButton" to="." method="_on_start_pressed"]

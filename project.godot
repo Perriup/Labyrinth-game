@@ -23,6 +23,14 @@ Global="*res://global.gd"
 
 project/assembly_name="Procedural labyrinth"
 
+[editor]
+
+version_control/autoload_on_startup=true
+
+[editor_plugins]
+
+enabled=PackedStringArray("res://addons/copilot/plugin.cfg")
+
 [input]
 
 up={

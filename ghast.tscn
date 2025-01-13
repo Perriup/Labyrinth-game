@@ -1,0 +1,32 @@
+[gd_scene load_steps=6 format=3 uid="uid://df4mrvf6u4mwn"]
+
+[ext_resource type="Script" path="res://ghast.gd" id="1_3xn7m"]
+[ext_resource type="PackedScene" uid="uid://c6ano7wo37xwh" path="res://ghast_model.tscn" id="2_8htfl"]
+[ext_resource type="AudioStream" uid="uid://d3vbxtvxucfhw" path="res://SFX/Ghast Idle.mp3" id="3_gyxlx"]
+[ext_resource type="AudioStream" uid="uid://c3fnnpptthtat" path="res://SFX/Scream.mp3" id="4_6ji8r"]
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_i7t1m"]
+radius = 0.361789
+height = 1.00875
+
+[node name="Ghast" type="Area3D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_3xn7m")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.481486, 0)
+shape = SubResource("CapsuleShape3D_i7t1m")
+
+[node name="Ghast" parent="." instance=ExtResource("2_8htfl")]
+transform = Transform3D(-0.3, 0, -4.52987e-08, 0, 0.3, 0, 4.52987e-08, 0, -0.3, 0.413536, 0, 0)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("3_gyxlx")
+autoplay = true
+
+[node name="AudioStreamPlayer3D2" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("4_6ji8r")
+volume_db = -20.0
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

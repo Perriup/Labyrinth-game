@@ -518,7 +518,7 @@ public partial class MazeGeneration : Node
 				string open_route = "NS";
 				if (maze[x, z].East == false && maze[x, z].West == false)
 					open_route = "EW";
-				int correct_level = 2;//rnd.Next(3);
+				int correct_level = rnd.Next(3);
 				Node3D doors = new Node3D(); // Used for spawning door solution
 				
 				for (int y = 0; y < level_name_list.Count; y++)

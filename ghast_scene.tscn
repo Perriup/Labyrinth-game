@@ -1,0 +1,5 @@
+[gd_scene load_steps=2 format=3 uid="uid://bv0gmdvv61vtd"]
+
+[ext_resource type="PackedScene" uid="uid://cav7toouqpxaw" path="res://Objects/Ghast/ghast.glb" id="1_amw23"]
+
+[node name="Sketchfab_Scene" instance=ExtResource("1_amw23")]

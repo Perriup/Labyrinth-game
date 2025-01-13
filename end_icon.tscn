@@ -14,6 +14,7 @@ emission_energy_multiplier = 0.5
 material = SubResource("StandardMaterial3D_qhsom")
 text = "FINISH"
 font = ExtResource("2_3u6sr")
+font_size = 15
 uppercase = true
 depth = 0.0
 

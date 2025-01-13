@@ -32,3 +32,7 @@ func _on_start_pressed() -> void:
 	Global.shared_data["length"] = length
 	
 	get_tree().change_scene_to_file("res://main.tscn")
+
+
+func _on_tutorial_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://tutorial.tscn")
