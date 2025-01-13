@@ -34,7 +34,7 @@ points = PackedVector3Array(-0.0129303, -0.507937, -0.507937, 0.0188033, 0.50793
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_h10va"]
 points = PackedVector3Array(-0.0129303, -0.507937, -0.507937, 0.0188033, 0.507937, 0.507937, -0.0129303, 0.507937, 0.507937, 0.0188033, -0.507937, 0.507937, 0.0188033, 0.507937, -0.507937, -0.0129303, 0.507937, -0.507937, -0.0129303, -0.507937, 0.507937, 0.0188033, -0.507937, -0.507937)
 
-[node name="BaseNode" type="Node3D"]
+[node name="Labyrinth" type="Node3D"]
 
 [node name="Floor" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_671il")

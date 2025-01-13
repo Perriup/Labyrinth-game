@@ -43,7 +43,7 @@ points = PackedVector3Array(-0.0129303, -0.507937, -0.507937, 0.0188033, 0.50793
 [sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_h10va"]
 points = PackedVector3Array(-0.0129303, -0.507937, -0.507937, 0.0188033, 0.507937, 0.507937, -0.0129303, 0.507937, 0.507937, 0.0188033, -0.507937, 0.507937, 0.0188033, 0.507937, -0.507937, -0.0129303, 0.507937, -0.507937, -0.0129303, -0.507937, 0.507937, 0.0188033, -0.507937, -0.507937)
 
-[node name="BaseNode" type="Node3D"]
+[node name="Labyrinth" type="Node3D"]
 
 [node name="Floor" type="MeshInstance3D" parent="."]
 mesh = SubResource("PlaneMesh_671il")
@@ -54,7 +54,7 @@ mesh = SubResource("PlaneMesh_671il")
 shape = SubResource("ConvexPolygonShape3D_ibim5")
 
 [node name="WestWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.499431, 0.5, -0.000298262)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.5, 0.5, 0)
 mesh = SubResource("BoxMesh_5e46k")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="WestWall"]
@@ -90,7 +90,7 @@ mesh = SubResource("BoxMesh_5e46k")
 shape = SubResource("ConvexPolygonShape3D_43r41")
 
 [node name="EastWall" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.500718, 0.497577, -0.000948906)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.5, 0.5, 0)
 mesh = SubResource("BoxMesh_5e46k")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="EastWall"]

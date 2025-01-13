@@ -515,7 +515,10 @@ public partial class MazeGeneration : Node
 				
 			if ((maze[x, z].North == false && maze[x, z].South == false) || (maze[x, z].East == false && maze[x, z].West == false))
 			{
-				int correct_level = 0;//rnd.Next(3);
+				string open_route = "NS";
+				if (maze[x, z].East == false && maze[x, z].West == false)
+					open_route = "EW";
+				int correct_level = 2;//rnd.Next(3);
 				Node3D doors = new Node3D(); // Used for spawning door solution
 				
 				for (int y = 0; y < level_name_list.Count; y++)
@@ -562,6 +565,23 @@ public partial class MazeGeneration : Node
 					// Place the obstacle
 					PackedScene obstacle_scene = (PackedScene)GD.Load(obstacle_name);
 					Node3D obstacle_instance = (Node3D)obstacle_scene.Instantiate();
+					
+					// This is to stop Z fighting on placed obstacles
+					if(obstacle_instance.Name =="Labyrinth")
+					{
+						obstacle_instance.GetNode<Node3D>("Roof").QueueFree();
+						obstacle_instance.GetNode<Node3D>("Floor").QueueFree();
+						if (open_route == "NS")
+						{
+							obstacle_instance.GetNode<Node3D>("NorthWall").QueueFree();
+							obstacle_instance.GetNode<Node3D>("SouthWall").QueueFree();
+						}
+						else if (open_route == "EW")
+						{
+							obstacle_instance.GetNode<Node3D>("EastWall").QueueFree();
+							obstacle_instance.GetNode<Node3D>("WestWall").QueueFree();
+						}
+					}
 					if (y == 1 && correct_level == y)
 						obstacle_instance.Position = new Vector3(x, 0, z);
 					else
@@ -604,15 +624,20 @@ public partial class MazeGeneration : Node
 					}
 					AddChild(obstacle_instance);
 					if (correct_level == 2 && y == 2)
+					{
 						doors = obstacle_instance;
+					}
 				}
 				
+				GD.Print("correct level: " + correct_level);
 				if (correct_level == 0 || correct_level == 2)
 				{
+					// Where the solution (shovel, lever) will be placed
 					Vertex solution = GetRandomReachableVertex (maze, width, length, x, z);
-					string solution_path = "";
+
 					if (correct_level == 0)
 					{
+						// Place a shovel to remove the rubble
 						PackedScene solution_scene = (PackedScene)GD.Load("res://shovel.tscn");
 						Node3D solution_instance = (Node3D)solution_scene.Instantiate();
 						solution_instance.Position = new Vector3(solution.X, rnd.Next(1, 3), solution.Y);
@@ -620,8 +645,41 @@ public partial class MazeGeneration : Node
 					}
 					else
 					{
-						Node3D leverNode = doorsInstance.GetNode<Node3D>("Lever");
-						leverNode.Position = (solution.X, 2, solution.Y); 
+						// Move the lever into correct position
+						Node3D lever_node = doors.GetNode<Node3D>("Lever");
+						
+						// Adjust so that lever is attached to a wall or ground if no walls present
+						Vector3 lever_position = new Vector3(solution.X, 2.5f, solution.Y);
+						Vector3 lever_rotation = new Vector3(0, 0, 0);
+					
+						if (!maze[solution.X, solution.Y].North)
+						{
+							lever_position  += new Vector3(0, 0, 0.47f);
+							lever_rotation = new Vector3(0, Mathf.Pi, 0);
+						}
+						else if (!maze[solution.X, solution.Y].South)
+						{
+							lever_position  += new Vector3(0, 0, -0.47f);
+							////lever_rotation = new Vector3(0, Mathf.Pi/2, 0);
+						}
+						else if (!maze[solution.X, solution.Y].East)
+						{
+							lever_position  += new Vector3(0.47f, 0, 0);
+							lever_rotation = new Vector3(0, Mathf.Pi / 2 * 3 , 0);
+						}
+						else if (!maze[solution.X, solution.Y].West)
+						{
+							lever_position  += new Vector3(-0.47f, 0, 0);
+							lever_rotation = new Vector3(0, Mathf.Pi / 2, 0);
+						}
+						else
+						{
+							lever_position  += new Vector3(0, -0.47f, 0);
+							lever_rotation = new Vector3(Mathf.Pi / 2 * 3, 0, 0);
+						}
+						
+						lever_node.GlobalPosition = lever_position;
+						lever_node.GlobalRotation = lever_rotation;
 					}
 				}
 				placed_obstacles++;
@@ -629,8 +687,6 @@ public partial class MazeGeneration : Node
 			stop_placing:
 			if (placed_obstacles >= obstacle_count || attempted_indices >= available_indices.Count)
 				break;
-			//// Determine blocked route and place a key
-			//PlaceKey(route, chosen_route_indices.First(), level_name_list, obstacle_instance);
 		}
 	}
 	
@@ -649,11 +705,9 @@ public partial class MazeGeneration : Node
 		{
 			Vertex current = queue.Dequeue();
 			
-			// Skip the obstacle using its coordinates
-			if (current.X == obstacleX && current.Y == obstacleZ)
+			if ((current.X == obstacleX && current.Y == obstacleZ)) // Skip end
 				continue;
 				
-			// Add the current vertex to the reachable list
 			reachableVertices.Add(current);
 			
 			// Explore neighbors if they are within bounds, not visited, and connected
@@ -683,7 +737,11 @@ public partial class MazeGeneration : Node
 		if (reachableVertices.Count > 0)
 		{
 			Random rnd = new Random();
-			return reachableVertices[rnd.Next(reachableVertices.Count)];
+			RedoRandomSelect:
+			Vertex result = reachableVertices[rnd.Next(reachableVertices.Count)];
+			if((result.X == 0 && result.Y == 0) || (result.X == width && result.Y == length))
+				goto RedoRandomSelect;
+			return result;
 		}
 		
 		return null; // No reachable vertex found

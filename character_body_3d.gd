@@ -40,7 +40,7 @@ func _physics_process(delta: float) -> void:
 		velocity.x = move_toward(velocity.x, 0, SPEED)
 		velocity.z = move_toward(velocity.z, 0, SPEED)
 		head_bob.pause()
-
+	
 	#Handle floor change
 	if Input.is_action_just_pressed("go_up_a_floor") && global_transform.origin.y < 2:
 		global_transform.origin.y += 1
